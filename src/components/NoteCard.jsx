@@ -1,13 +1,53 @@
-import { useRef } from "react";
-import { TrashIcon } from "../icons/Trash"
+import { useEffect, useRef, useState } from "react";
+import Trash from "../icons/Trash";
 
 const NoteCard = ({ note }) => {
 
-    let position = JSON.parse(note.position);
     const colors = JSON.parse(note.colors)
     const body = JSON.parse(note.body);
+    const [position, setPosition] = useState(JSON.parse(note.position));
+    let mouseStartPos = { x: 0, y: 0 }
 
+    const cardRef = useRef(null)
     const textAreaRef = useRef(null)
+
+    useEffect(() => {
+        autoGrow(textAreaRef)
+    }, [])
+
+    function autoGrow(textAreaRef) {
+        const { current } = textAreaRef;
+        current.style.height = "auto";
+        current.style.height = current.scrollHeight + "px";
+    }
+
+    const mouseDown = (e) => {
+        mouseStartPos.x = e.clientX;
+        mouseStartPos.y = e.clientY;
+
+        document.addEventListener("mousemove", mouseMove);
+        document.addEventListener("mouseup", mouseUp)
+    }
+
+    const mouseMove = (e) => {
+        let mouseMoveDir = {
+            x: mouseStartPos.x - e.clientX,
+            y: mouseStartPos.y - e.clientY,
+        };
+
+        mouseStartPos.x = e.clientX
+        mouseStartPos.y = e.clientY
+
+        setPosition({
+            x: cardRef.current.offsetLeft - mouseMoveDir.x,
+            y: cardRef.current.offsetTop - mouseMoveDir.y,
+        });
+    }
+
+    const mouseUp = () => {
+        document.removeEventListener("mousemove", mouseMove);
+        document.removeEventListener("mouseup", mouseUp);
+    };
 
     return (
         <div
@@ -17,12 +57,14 @@ const NoteCard = ({ note }) => {
                 left: `${position.x}px`,
                 top: `${position.y}px`,
             }}
+            ref={cardRef}
         >
             <div
                 className="card-header"
                 style={{ backgroundColor: colors.colorHeader }}
+                onMouseDown={mouseDown}
             >
-                <TrashIcon />
+                <Trash />
             </div>
 
             <div className="card-body">
@@ -30,6 +72,9 @@ const NoteCard = ({ note }) => {
                     ref={textAreaRef}
                     style={{ color: colors.colorText }}
                     defaultValue={body}
+                    onInput={() => {
+                        autoGrow(textAreaRef)
+                    }}
                 ></textarea>
             </div>
 
