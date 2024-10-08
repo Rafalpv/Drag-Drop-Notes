@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import Trash from "../icons/Trash";
+import DeleteButton from "./DeleteButton";
+import { setZIndex, autoGrow, setNewOfsset } from "../utils";
 
 const NoteCard = ({ note }) => {
 
@@ -15,13 +16,9 @@ const NoteCard = ({ note }) => {
         autoGrow(textAreaRef)
     }, [])
 
-    function autoGrow(textAreaRef) {
-        const { current } = textAreaRef;
-        current.style.height = "auto";
-        current.style.height = current.scrollHeight + "px";
-    }
-
     const mouseDown = (e) => {
+        setZIndex(cardRef.current)
+
         mouseStartPos.x = e.clientX;
         mouseStartPos.y = e.clientY;
 
@@ -42,6 +39,9 @@ const NoteCard = ({ note }) => {
             x: cardRef.current.offsetLeft - mouseMoveDir.x,
             y: cardRef.current.offsetTop - mouseMoveDir.y,
         });
+
+        const newPosition = setNewOfsset(cardRef.current, mouseMoveDir);
+        setPosition(newPosition)
     }
 
     const mouseUp = () => {
@@ -64,7 +64,7 @@ const NoteCard = ({ note }) => {
                 style={{ backgroundColor: colors.colorHeader }}
                 onMouseDown={mouseDown}
             >
-                <Trash />
+                <DeleteButton noteId={note.id} />
             </div>
 
             <div className="card-body">
@@ -75,6 +75,7 @@ const NoteCard = ({ note }) => {
                     onInput={() => {
                         autoGrow(textAreaRef)
                     }}
+                    onFocus={() => setZIndex(cardRef.current)}
                 ></textarea>
             </div>
 
