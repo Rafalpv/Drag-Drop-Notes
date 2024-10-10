@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import DeleteButton from "./DeleteButton";
-import { setZIndex, autoGrow, setNewOfsset } from "../utils";
+import { setZIndex, autoGrow, setNewOfsset, bodyParser } from "../utils";
 
 const NoteCard = ({ note }) => {
 
     const colors = JSON.parse(note.colors)
-    const body = JSON.parse(note.body);
+    const body = bodyParser(note.body);
     const [position, setPosition] = useState(JSON.parse(note.position));
     let mouseStartPos = { x: 0, y: 0 }
 
