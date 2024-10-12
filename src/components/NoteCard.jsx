@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import DeleteButton from "./DeleteButton";
 import { setZIndex, autoGrow, setNewOfsset, bodyParser } from "../utils";
+import { db } from '../database/databases'
+import Spinner from "../icons/Spinner";
 
 const NoteCard = ({ note }) => {
 
@@ -11,6 +13,9 @@ const NoteCard = ({ note }) => {
 
     const cardRef = useRef(null)
     const textAreaRef = useRef(null)
+
+    const [saving, setSaving] = useState(false)
+    const keyUpTimer = useRef(null)
 
     useEffect(() => {
         autoGrow(textAreaRef)
@@ -47,7 +52,31 @@ const NoteCard = ({ note }) => {
     const mouseUp = () => {
         document.removeEventListener("mousemove", mouseMove);
         document.removeEventListener("mouseup", mouseUp);
+
+        const newPosition = setNewOfsset(cardRef.current)
+        saveData("position", newPosition)
     };
+
+    const saveData = async (key, value) => {
+        const payload = { [key]: JSON.stringify(value) };
+        try {
+            await db.notes.update(note.$id, payload)
+        } catch (error) {
+            console.log(error)
+        }
+        setSaving(false)
+    };
+
+    const handleKeyUp = async () => {
+        setSaving(true)
+        if (keyUpTimer.current) {
+            clearTimeout(keyUpTimer.current)
+        }
+
+        keyUpTimer.current = setTimeout(() => {
+            saveData("body", textAreaRef.current.value)
+        }, 2000)
+    }
 
     return (
         <div
@@ -65,6 +94,14 @@ const NoteCard = ({ note }) => {
                 onMouseDown={mouseDown}
             >
                 <DeleteButton noteId={note.id} />
+                {
+                    saving && (
+                        <div className="card-saving">
+                            <Spinner color={colors.colorText}/>
+                            <span style={{ color: colors.colorText }}>Saving...</span>
+                        </div>
+                    )
+                }
             </div>
 
             <div className="card-body">
@@ -76,6 +113,7 @@ const NoteCard = ({ note }) => {
                         autoGrow(textAreaRef)
                     }}
                     onFocus={() => setZIndex(cardRef.current)}
+                    onKeyUp={handleKeyUp}
                 ></textarea>
             </div>
 
