@@ -4,7 +4,7 @@ import { setZIndex, autoGrow, setNewOfsset, bodyParser } from "../utils";
 import { db } from '../database/databases'
 import Spinner from "../icons/Spinner";
 
-const NoteCard = ({ note }) => {
+const NoteCard = ({ note, setNotes }) => {
 
     const colors = JSON.parse(note.colors)
     const body = bodyParser(note.body);
@@ -76,7 +76,7 @@ const NoteCard = ({ note }) => {
         keyUpTimer.current = setTimeout(() => {
             saveData("body", textAreaRef.current.value)
         }, 2000)
-    }
+    };
 
     return (
         <div
@@ -93,7 +93,7 @@ const NoteCard = ({ note }) => {
                 style={{ backgroundColor: colors.colorHeader }}
                 onMouseDown={mouseDown}
             >
-                <DeleteButton noteId={note.id} />
+                <DeleteButton noteId={note.$id} setNotes={setNotes} />
                 {
                     saving && (
                         <div className="card-saving">

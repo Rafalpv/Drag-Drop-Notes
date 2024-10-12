@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-//import { database } from '../src/database/config';
 import { db } from '../src/database/databases'
 import Controls from '../src/components/Controls';
 import NoteCard from '../src/components/NoteCard';
@@ -20,7 +19,7 @@ const NotesPage = () => {
     return (
         <div>
             {notes.map((note) => (
-                <NoteCard note={note} key={note.$id} />
+                <NoteCard note={note} key={note.$id} setNotes={setNotes} />
             ))}
             <Controls />
         </div>
