@@ -10,9 +10,9 @@ const NotesPage = () => {
     return (
         <div>
             {
-                notes.map((note) => {
+                notes.map((note) => (
                     <NoteCard key={note.$id} note={note} setNotes={setNotes}/>
-                 })
+                 ))
             }
             <Controls />
         </div>

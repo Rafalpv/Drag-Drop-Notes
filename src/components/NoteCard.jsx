@@ -86,8 +86,6 @@ const NoteCard = ({ note, setNotes }) => {
         }, 2000)
     };
 
-    c
-
     return (
         <div
             className="card"
@@ -123,8 +121,8 @@ const NoteCard = ({ note, setNotes }) => {
                         autoGrow(textAreaRef)
                     }}
                     onFocus={() => {
-                        setZIndex(cardRef.current);
                         setSelectedNotes(note);
+                        setZIndex(cardRef.current);
                     }}
                     onKeyUp={handleKeyUp}
                 ></textarea>
