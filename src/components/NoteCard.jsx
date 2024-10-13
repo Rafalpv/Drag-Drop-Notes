@@ -19,14 +19,15 @@ const NoteCard = ({ note, setNotes }) => {
 
     useEffect(() => {
         autoGrow(textAreaRef)
+        setZIndex(cardRef.current)
     }, [])
 
     const mouseDown = (e) => {
         if (e.target.className === "card-header") {
-            setZIndex(cardRef.current);
+            setZIndex(cardRef.current)
      
-            mouseStartPos.x = e.clientX;
-            mouseStartPos.y = e.clientY;
+            mouseStartPos.x = e.clientX
+            mouseStartPos.y = e.clientY
      
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
