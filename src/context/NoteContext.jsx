@@ -7,6 +7,7 @@ export const NoteContext = createContext();
 const NotesProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [notes, setNotes] = useState();
+    const [selectedNote, setSelectedNote] = useState(null)
  
     useEffect(() => {
         init();
@@ -17,8 +18,8 @@ const NotesProvider = ({ children }) => {
         setNotes(response.documents);
         setLoading(false);
     };
- 
-    const contextData = { notes, setNotes };
+
+    const contextData = { notes, setNotes, selectedNote, setSelectedNote };
  
     return (
         <NoteContext.Provider value={contextData}>
