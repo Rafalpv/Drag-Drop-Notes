@@ -27,6 +27,7 @@ export const setZIndex = (selectedCard) => {
 export const bodyParser = (value) => {
     try {
        return JSON.parse(value) ;
+        // eslint-disable-next-line no-unused-vars
     } catch (error) {
         return value;
     }

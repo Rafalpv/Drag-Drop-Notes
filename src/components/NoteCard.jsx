@@ -18,7 +18,7 @@ const NoteCard = ({ note, setNotes }) => {
     const [saving, setSaving] = useState(false)
     const keyUpTimer = useRef(null)
 
-    const {setSelectedNotes} = useContext(NoteContext);
+    const {setSelectedNote} = useContext(NoteContext);
 
     useEffect(() => {
         autoGrow(textAreaRef)
@@ -28,6 +28,7 @@ const NoteCard = ({ note, setNotes }) => {
     const mouseDown = (e) => {
         if (e.target.className === "card-header") {
             setZIndex(cardRef.current)
+            setSelectedNote(note)
      
             mouseStartPos.x = e.clientX
             mouseStartPos.y = e.clientY
@@ -35,7 +36,6 @@ const NoteCard = ({ note, setNotes }) => {
             document.addEventListener("mousemove", mouseMove);
             document.addEventListener("mouseup", mouseUp);
 
-            setSelectedNotes(note)
         }
     }
 
@@ -121,8 +121,8 @@ const NoteCard = ({ note, setNotes }) => {
                         autoGrow(textAreaRef)
                     }}
                     onFocus={() => {
-                        setSelectedNotes(note);
                         setZIndex(cardRef.current);
+                        setSelectedNote(note);
                     }}
                     onKeyUp={handleKeyUp}
                 ></textarea>
